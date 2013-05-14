@@ -42,10 +42,17 @@ var questions = [{
 function createQuestionElement(index) {
     var qDiv = document.createElement('div');
     qDiv.setAttribute('id', 'question');
+
+    var header = document.createElement('h2');
+    header.innerHTML = 'Question ' + (index + 1) + ":";
+
     var question = document.createElement('p');
     question.innerHTML = questions[index].question;
+
+    qDiv.appendChild(header);
     qDiv.appendChild(question);
     qDiv.appendChild(createRadios(index));
+    
     return qDiv;
 }
 
@@ -75,21 +82,29 @@ function displayScore() {
         }
     }
 
-    para.innerHTML = 'You got ' + numCorrect + ' questions out of ' + questions.length + ' right!!!';
+    para.innerHTML = 'You got ' + numCorrect + ' questions out of ' +
+        questions.length + ' right!!!';
     return para;
+}
+
+function select() {
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            selections[questionCounter] = radios[i].value;
+        }
+    }
 }
 
 var questionCounter = 0;
 var selections = [];
-var firstDiv = createQuestionElement(questionCounter);
 var radios = document.getElementsByName('answer');
 
+var firstDiv = createQuestionElement(questionCounter);
 document.getElementById('quiz').appendChild(firstDiv);
 
 $('#next').on('click', function () {
-    var nextQuestion;
-
     select();
+
     if (selections[questionCounter] === undefined) {
         alert('Please make a selection!');
     } else {
@@ -99,8 +114,7 @@ $('#next').on('click', function () {
         document.getElementById('prev').setAttribute('style', 'display:inline');
 
         if (questionCounter < questions.length) {
-            nextQuestion = createQuestionElement(questionCounter);
-            //$('#quiz').append(nextQuestion);
+            var nextQuestion = createQuestionElement(questionCounter);
             document.getElementById('quiz').appendChild(nextQuestion);
             if(selections[questionCounter] !== undefined){
                 radios[selections[questionCounter]].checked = true;
@@ -114,16 +128,18 @@ $('#next').on('click', function () {
 });
 
 $('#prev').on('click', function () {
-    var prevQuestion;
-
     select();
+
+    questionCounter--;
+    $('#question').remove();
+
+    if(questionCounter == 0){
+        document.getElementById('prev').setAttribute('style', 'display:none');
+    }
+
+    var prevQuestion = createQuestionElement(questionCounter);
+    document.getElementById('quiz').appendChild(prevQuestion);
+    radios[selections[questionCounter]].checked = true;
 });
 
 
-function select() {
-    for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-            selections[questionCounter] = radios[i].value;
-        }
-    }
-}
