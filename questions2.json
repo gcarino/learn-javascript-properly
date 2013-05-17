@@ -1,11 +1,11 @@
-var allQuestions = [
+var questions = [
 	{
 		question: "Which American State is the best?", 
 		choices: ['New York', 'Washington', 'Texas', 'California','Nevada'],
 		correctAnswer: 3
 	},
 	{
-		question: "Which country hasn't Gary been to?".
+		question: "Which country hasn't Gary been to?",
 		choices:['Mexico','Argentina','Ecuador','Indonesia','Laos'],
 		correctAnswer: 2
 	},
