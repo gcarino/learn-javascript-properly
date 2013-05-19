@@ -1,3 +1,7 @@
+body {
+    font-family: Open Sans;
+}
+
 h1 {
     text-align: center;
 }
@@ -8,6 +12,7 @@ h1 {
 
 #quiz {
     text-indent: 10px;
+    display:none;
 }
 
 .button {
@@ -22,10 +27,12 @@ h1 {
     color: black;
     margin: 0 2px 0 2px;
 }
+
 .button a {
     text-decoration: none;
     color: black;
 }
+
 #container {
     width:50%;
     margin:auto;
@@ -35,7 +42,9 @@ h1 {
     border-radius:5px;
     color: #FFFFFF;
     font-weight: bold;
+    box-shadow: 5px 5px 5px #888;
 }
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -44,4 +53,9 @@ ul {
 
 #prev {
     display:none;
+}
+
+#start {
+    display:none;
+    width: 75px;
 }
