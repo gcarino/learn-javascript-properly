@@ -1,6 +1,7 @@
-var questionCounter = 0;
-var selections = [];
-var radios = document.getElementsByName('answer');
+var questionCounter = 0; //Tracks question number
+var selections = []; //Array containing user choices
+//var radios = document.getElementsByName('answer');
+//var radios = $("input[name=answer]");
 
 var firstDiv = createQuestionElement(questionCounter);
 //document.getElementById('quiz').appendChild(firstDiv);
@@ -25,7 +26,8 @@ $('#next').on('click', function () {
                 //document.getElementById('quiz').appendChild(nextQuestion);
                 $('#quiz').append(nextQuestion).fadeIn();
                 if (selections[questionCounter] !== undefined) {
-                    radios[selections[questionCounter]].checked = true;
+                    //radios[selections[questionCounter]].checked = true;
+                    $('input[value=' + selections[questionCounter] + ']').prop('checked', true);
                 }
             } else {
                 //document.getElementById('quiz')
@@ -61,18 +63,34 @@ $('#prev').on('click', function () {
         var prevQuestion = createQuestionElement(questionCounter);
         //document.getElementById('quiz').appendChild(prevQuestion);
         $('#quiz').append(prevQuestion).fadeIn();
-        radios[selections[questionCounter]].checked = true;
+        //radios[selections[questionCounter]].checked = true;
+        $('input[value=' + selections[questionCounter] + ']').prop('checked', true);
+
     });
 });
 
 // Click handler for the 'Start Over' button
-$('#start').click(function(){
-    
+$('#start').click(function () {
+    questionCounter = 0;
+    for (var i = 0, max = selections.length; i < max; i++) {
+        selections[i] = undefined;
+    }
+
+    $('#quiz').fadeOut(function () {
+        $('#score').remove();
+        firstDiv = createQuestionElement(questionCounter);
+        $('#quiz').append(firstDiv).fadeIn();
+
+        $('#next').css('display', 'inline');
+        $('#start').css('display', 'none');
+    });
 });
 
 // Creates and returns the div that contains the questions and 
 // the answer selections
 function createQuestionElement(index) {
+    //  Old method, done with pure JS
+    /*
     var qElement = document.createElement('div');
     qElement.setAttribute('id', 'question');
 
@@ -88,11 +106,23 @@ function createQuestionElement(index) {
     qElement.appendChild(radioButtons);
     
     return qElement;
-    
-/*  Going to try using jQuery
-    var qElement = $('<div>',{id:'question'});
-    qElement.text('jQuery is working');
-    */
+*/
+
+    //  Done using jQuery
+    var qElement = $('<div>', {
+        id: 'question'
+    });
+
+    var header = $('<h2>Question ' + (index + 1) + ':</h2>');
+    qElement.append(header);
+
+    var question = $('<p>').append(questions[index].question);
+    qElement.append(question);
+
+    var radioButtons = createRadios(index);
+    qElement.append(radioButtons);
+
+    return qElement;
 }
 
 // Creates a list of the answer choices as radio inputs
@@ -114,27 +144,29 @@ function createRadios(index) {
 
 // Reads the user selection
 function select() {
+    /*
     for (var inputVal = 0; inputVal < radios.length; inputVal++) {
         if (radios[inputVal].checked) {
-            selections[questionCounter] = radios[inputVal].value;
+            selections[questionCounter] = +radios[inputVal].value;
         }
-    }
+    }*/
+    selections[questionCounter] = +$('input[name="answer"]:checked').val();
 }
 
 // Computes score and returns a paragraph element to be displayed
 function displayScore() {
     var score = document.createElement('p');
-    var numCorrect = 0;
+    score.setAttribute('id', 'score');
 
+    var numCorrect = 0;
     for (var i = 0; i < selections.length; i++) {
         if (selections[i] === questions[i].correctAnswer) {
             numCorrect++;
         }
     }
-    console.log(typeof(selections[0]));
-    console.log(typeof(questions[0].correctAnswer));
+    console.log(typeof (selections[0]));
+    console.log(typeof (questions[0].correctAnswer));
 
-    score.innerHTML = 'You got ' + numCorrect + ' questions out of ' +
-        questions.length + ' right!!!';
+    score.innerHTML = 'You got ' + numCorrect + ' questions out of ' + questions.length + ' right!!!';
     return score;
 }

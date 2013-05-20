@@ -1,17 +1,33 @@
-var questions = [
-	{
-		question: "Which American State is the best?", 
-		choices: ['New York', 'Washington', 'Texas', 'California','Nevada'],
-		correctAnswer: 3
-	},
-	{
-		question: "Which country hasn't Gary been to?",
-		choices:['Mexico','Argentina','Ecuador','Indonesia','Laos'],
-		correctAnswer: 2
-	},
-	{
-		question: "",
-		choices:[],
-		correctAnswer: 0
-	}
-];
+var questions = [{
+    question: "Which American State is the best?",
+    choices: ['New York', 'Washington', 'Texas', 'California', 'Nevada'],
+    correctAnswer: 3
+	}, {
+    question: "Which country hasn't Gary been to?",
+    choices: ['Mexico', 'Argentina', 'Ecuador', 'Colombia', 'Peru'],
+    correctAnswer: 2
+	}, {
+    question: "What city was Gary born in?",
+    choices: ['Newark', 'Trenton', 'Plainfield', 'Jersey City', 'New Brunswick'],
+    correctAnswer: 3
+	}, {
+    question: "What is Gary's favorite food?",
+    choices: ['Roli Roti Porchetta Sandwich', "Phil's BBQ Beef Ribs", 'Lumpia', 'Panang Curry with Duck', 'Bun Thit Nuong'],
+    correctAnswer: 1
+	}, {
+    question: "What is Gary's favorite type of sashimi?",
+    choices: ['Tuna', 'Salmon', 'Mackerel', 'Yellowtail', 'Urchin'],
+    correctAnswer: 3
+	}, {
+    question: "What is Gary's favorite type of sushi?",
+    choices: ['Amaebi', 'Unagi', 'Dragon Roll', 'Salmon Skin Hand Roll', 'Philadelphia Roll'],
+    correctAnswer: 0
+	}, {
+    question: "Which is Gary's least favorite meat?",
+    choices: ['Beef', 'Chicken', 'Lamb', 'Pork', 'Duck'],
+    correctAnswer: 1
+	}, {
+    question: "Who does Gary love the mostest?",
+    choices: ['The Kaykays', 'Poo', 'Mud', 'Rocks', 'Sand'],
+    correctAnswer: 0
+}];
