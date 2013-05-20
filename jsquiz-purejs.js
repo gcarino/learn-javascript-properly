@@ -1,37 +1,43 @@
 var questionCounter = 0; //Tracks question number
 var selections = []; //Array containing user choices
+var radios = document.getElementsByName('answer');
 
 var firstDiv = createQuestionElement(questionCounter);
+//document.getElementById('quiz').appendChild(firstDiv);
 $('#quiz').append(firstDiv).fadeIn();
 
 // Click handler for the 'next' button
 $('#next').on('click', function () {
-    // Suspend click listener during fade animation
-    if($('#quiz').is(':animated')) {        
-        return false;
-    }
-
     select();
 
-    // If no user selection, progress is stopped
-    if (isNaN(selections[questionCounter])) {
+    if (selections[questionCounter] === undefined) {
         alert('Please make a selection!');
     } else {
         questionCounter++;
         $('#quiz').fadeOut(function () {
             $('#question').remove();
 
+            //document.getElementById('prev').setAttribute('style', 'display:inline');
             $('#prev').css('display', 'inline');
 
             if (questionCounter < questions.length) {
                 var nextQuestion = createQuestionElement(questionCounter);
+                //document.getElementById('quiz').appendChild(nextQuestion);
                 $('#quiz').append(nextQuestion).fadeIn();
-                if (!(isNaN(selections[questionCounter]))) {
-                    $('input[value='+selections[questionCounter]+']').prop('checked', true);
+                if (selections[questionCounter] !== undefined) {
+                    radios[selections[questionCounter]].checked = true;
+                    //$('input[value=' + selections[questionCounter] + ']').prop('checked', true);
                 }
             } else {
+                //document.getElementById('quiz')
+                //    .appendChild(displayScore());
                 var scoreElem = displayScore();
                 $('#quiz').append(scoreElem).fadeIn();
+                /*document.getElementById('next')
+                    .setAttribute('style', 'display:none');
+                document.getElementById('prev')
+                    .setAttribute('style', 'display:none');
+                    */
                 $('#next').css('display', 'none');
                 $('#prev').css('display', 'none');
                 $('#start').css('display', 'inline');
@@ -42,14 +48,10 @@ $('#next').on('click', function () {
 
 // Click handler for the 'prev' button
 $('#prev').on('click', function () {
-    if($('#quiz').is(':animated')) {
-        return false;
-    }
-
     select();
+
     questionCounter--;
 
-    // Removes 'Prev' button on first question
     $('#quiz').fadeOut(function () {
         $('#question').remove();
 
@@ -58,20 +60,20 @@ $('#prev').on('click', function () {
         }
 
         var prevQuestion = createQuestionElement(questionCounter);
+        //document.getElementById('quiz').appendChild(prevQuestion);
         $('#quiz').append(prevQuestion).fadeIn();
-        $('input[value=' + selections[questionCounter] + ']').prop('checked', true);
+        radios[selections[questionCounter]].checked = true;
+        //$('input[value=' + selections[questionCounter] + ']').prop('checked', true);
 
     });
 });
 
 // Click handler for the 'Start Over' button
 $('#start').click(function () {
-    if($('#quiz').is(':animated')) {
-        return false;
-    }
-
     questionCounter = 0;
-    selections = [];
+    for (var i = 0, max = selections.length; i < max; i++) {
+        selections[i] = undefined;
+    }
 
     $('#quiz').fadeOut(function () {
         $('#score').remove();
@@ -86,6 +88,26 @@ $('#start').click(function () {
 // Creates and returns the div that contains the questions and 
 // the answer selections
 function createQuestionElement(index) {
+    //  Old method, done with pure JS
+    /*
+    var qElement = document.createElement('div');
+    qElement.setAttribute('id', 'question');
+
+    var header = document.createElement('h2');
+    header.innerHTML = 'Question ' + (index + 1) + ":";
+    qElement.appendChild(header);
+
+    var question = document.createElement('p');
+    question.innerHTML = questions[index].question;
+    qElement.appendChild(question);
+
+    var radioButtons = createRadios(index);
+    qElement.appendChild(radioButtons);
+    
+    return qElement;
+*/
+
+    //  Done using jQuery
     var qElement = $('<div>', {
         id: 'question'
     });
@@ -104,29 +126,35 @@ function createQuestionElement(index) {
 
 // Creates a list of the answer choices as radio inputs
 function createRadios(index) {
-    var radioList = $('<ul>')
-    var item;
+    var radioList = document.createElement('ul');
+    var item = '';
     var input = '';
     for (var i = 0; i < questions[index].choices.length; i++) {
-        item = $('<li>')
+        item = document.createElement('li');
         input = '<input type="radio" name="answer" value=' + i + ' />';
         input += questions[index].choices[i];
-        item.append(input);
-        radioList.append(item);
+
+        item.innerHTML = input;
+        radioList.appendChild(item);
     }
+
     return radioList;
 }
 
-// Reads the user selection and pushes the value to an array
+// Reads the user selection
 function select() {
-    selections[questionCounter] = +$('input[name="answer"]:checked').val();
+    for (var inputVal = 0; inputVal < radios.length; inputVal++) {
+        if (radios[inputVal].checked) {
+            selections[questionCounter] = +radios[inputVal].value;
+        }
+    }
+    //selections[questionCounter] = +$('input[name="answer"]:checked').val();
 }
 
 // Computes score and returns a paragraph element to be displayed
 function displayScore() {
-    /*var score = document.createElement('p');
-    score.setAttribute('id', 'score');*/
-    var score = $('<p>',{id: 'score'});
+    var score = document.createElement('p');
+    score.setAttribute('id', 'score');
 
     var numCorrect = 0;
     for (var i = 0; i < selections.length; i++) {
@@ -134,8 +162,9 @@ function displayScore() {
             numCorrect++;
         }
     }
+    //console.log(typeof (selections[0]));
+    //console.log(typeof (questions[0].correctAnswer));
 
-    score.append('You got ' + numCorrect + ' questions out of ' 
-    + questions.length + ' right!!!');
+    score.innerHTML = 'You got ' + numCorrect + ' questions out of ' + questions.length + ' right!!!';
     return score;
 }
