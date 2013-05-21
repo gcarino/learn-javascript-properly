@@ -124,8 +124,6 @@ function select() {
 
 // Computes score and returns a paragraph element to be displayed
 function displayScore() {
-    /*var score = document.createElement('p');
-    score.setAttribute('id', 'score');*/
     var score = $('<p>',{id: 'score'});
 
     var numCorrect = 0;
