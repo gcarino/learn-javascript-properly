@@ -1,17 +1,17 @@
 (function() {
     var questionCounter = 0; //Tracks question number
     var selections = []; //Array containing user choices
+    var quiz = $('#quiz'); //Quiz div object
 
-    var firstDiv = createQuestionElement(questionCounter);
-    $('#quiz').append(firstDiv).fadeIn();
+    // Display initial question
+    displayNext();
 
     // Click handler for the 'next' button
     $('#next').on('click', function () {
         // Suspend click listener during fade animation
-        if($('#quiz').is(':animated')) {        
+        if(quiz.is(':animated')) {        
             return false;
         }
-
         select();
 
         // If no user selection, progress is stopped
@@ -19,69 +19,29 @@
             alert('Please make a selection!');
         } else {
             questionCounter++;
-            $('#quiz').fadeOut(function () {
-                $('#question').remove();
-
-                $('#prev').css('display', 'inline');
-
-                if (questionCounter < questions.length) {
-                    var nextQuestion = createQuestionElement(questionCounter);
-                    $('#quiz').append(nextQuestion).fadeIn();
-                    if (!(isNaN(selections[questionCounter]))) {
-                        $('input[value='+selections[questionCounter]+']').prop('checked', true);
-                    }
-                } else {
-                    var scoreElem = displayScore();
-                    $('#quiz').append(scoreElem).fadeIn();
-                    $('#next').css('display', 'none');
-                    $('#prev').css('display', 'none');
-                    $('#start').css('display', 'inline');
-                }
-            });
+            displayNext();
         }
     });
-
+    
     // Click handler for the 'prev' button
     $('#prev').on('click', function () {
-        if($('#quiz').is(':animated')) {
+        if(quiz.is(':animated')) {
             return false;
         }
-
         select();
         questionCounter--;
-
-        // Removes 'Prev' button on first question
-        $('#quiz').fadeOut(function () {
-            $('#question').remove();
-
-            if (questionCounter === 0) {
-                document.getElementById('prev').setAttribute('style', 'display:none');
-            }
-
-            var prevQuestion = createQuestionElement(questionCounter);
-            $('#quiz').append(prevQuestion).fadeIn();
-            $('input[value=' + selections[questionCounter] + ']').prop('checked', true);
-
-        });
+        displayNext();
     });
 
     // Click handler for the 'Start Over' button
     $('#start').click(function () {
-        if($('#quiz').is(':animated')) {
+        if(quiz.is(':animated')) {
             return false;
         }
-
         questionCounter = 0;
         selections = [];
-
-        $('#quiz').fadeOut(function () {
-            $('#score').remove();
-            firstDiv = createQuestionElement(questionCounter);
-            $('#quiz').append(firstDiv).fadeIn();
-
-            $('#next').css('display', 'inline');
-            $('#start').css('display', 'none');
-        });
+        displayNext();
+        $('#start').css('display', 'none');
     });
 
     // Creates and returns the div that contains the questions and 
@@ -109,7 +69,7 @@
         var item;
         var input = '';
         for (var i = 0; i < questions[index].choices.length; i++) {
-            item = $('<li>')
+            item = $('<li>');
             input = '<input type="radio" name="answer" value=' + i + ' />';
             input += questions[index].choices[i];
             item.append(input);
@@ -123,9 +83,38 @@
         selections[questionCounter] = +$('input[name="answer"]:checked').val();
     }
 
+    // Displays next requested element
+    function displayNext() {
+        quiz.fadeOut(function() {
+            $('#question').remove();
+
+            if(questionCounter < questions.length){
+                var nextQuestion = createQuestionElement(questionCounter);
+                quiz.append(nextQuestion).fadeIn();
+                if (!(isNaN(selections[questionCounter]))) {
+                    $('input[value='+selections[questionCounter]+']').prop('checked', true);
+                }
+
+                // Controls display of 'prev' button
+                if(questionCounter === 1){
+                    $('#prev').css('display', 'inline');
+                } else if(questionCounter === 0){
+                    $('#prev').css('display', 'none');
+                    $('#next').css('display', 'inline');
+                }
+            }else {
+                var scoreElem = displayScore();
+                quiz.append(scoreElem).fadeIn();
+                $('#next').css('display', 'none');
+                $('#prev').css('display', 'none');
+                $('#start').css('display', 'inline');
+            }
+        });
+    }
+
     // Computes score and returns a paragraph element to be displayed
     function displayScore() {
-        var score = $('<p>',{id: 'score'});
+        var score = $('<p>',{id: 'question'});
 
         var numCorrect = 0;
         for (var i = 0; i < selections.length; i++) {
@@ -138,4 +127,4 @@
         + questions.length + ' right!!!');
         return score;
     }
-}());
+})();
