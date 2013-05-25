@@ -12,7 +12,7 @@
         if(quiz.is(':animated')) {        
             return false;
         }
-        select();
+        choose();
 
         // If no user selection, progress is stopped
         if (isNaN(selections[questionCounter])) {
@@ -28,7 +28,7 @@
         if(quiz.is(':animated')) {
             return false;
         }
-        select();
+        choose();
         questionCounter--;
         displayNext();
     });
@@ -41,7 +41,8 @@
         questionCounter = 0;
         selections = [];
         displayNext();
-        $('#start').css('display', 'none');
+        // $('#start').css('display', 'none');
+        $('#start').hide();
     });
 
     // Creates and returns the div that contains the questions and 
@@ -65,7 +66,7 @@
 
     // Creates a list of the answer choices as radio inputs
     function createRadios(index) {
-        var radioList = $('<ul>')
+        var radioList = $('<ul>');
         var item;
         var input = '';
         for (var i = 0; i < questions[index].choices.length; i++) {
@@ -79,7 +80,7 @@
     }
 
     // Reads the user selection and pushes the value to an array
-    function select() {
+    function choose() {
         selections[questionCounter] = +$('input[name="answer"]:checked').val();
     }
 
@@ -97,17 +98,23 @@
 
                 // Controls display of 'prev' button
                 if(questionCounter === 1){
-                    $('#prev').css('display', 'inline');
+                    //$('#prev').css('display', 'inline');
+                    $('#prev').show();
                 } else if(questionCounter === 0){
-                    $('#prev').css('display', 'none');
-                    $('#next').css('display', 'inline');
+                    /*$('#prev').css('display', 'none');
+                    $('#next').css('display', 'inline');*/
+                    $('#prev').hide();
+                    $('#next').show();
                 }
             }else {
                 var scoreElem = displayScore();
                 quiz.append(scoreElem).fadeIn();
-                $('#next').css('display', 'none');
+                /*$('#next').css('display', 'none');
                 $('#prev').css('display', 'none');
-                $('#start').css('display', 'inline');
+                $('#start').css('display', 'inline');*/
+                $('#next').hide();
+                $('#prev').hide();
+                $('#start').show();
             }
         });
     }
@@ -123,8 +130,8 @@
             }
         }
 
-        score.append('You got ' + numCorrect + ' questions out of ' 
-        + questions.length + ' right!!!');
+        score.append('You got ' + numCorrect + ' questions out of ' +
+            questions.length + ' right!!!');
         return score;
     }
 })();
