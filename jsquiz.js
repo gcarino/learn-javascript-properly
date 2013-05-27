@@ -98,20 +98,15 @@
 
                 // Controls display of 'prev' button
                 if(questionCounter === 1){
-                    //$('#prev').css('display', 'inline');
                     $('#prev').show();
                 } else if(questionCounter === 0){
-                    /*$('#prev').css('display', 'none');
-                    $('#next').css('display', 'inline');*/
+
                     $('#prev').hide();
                     $('#next').show();
                 }
             }else {
                 var scoreElem = displayScore();
                 quiz.append(scoreElem).fadeIn();
-                /*$('#next').css('display', 'none');
-                $('#prev').css('display', 'none');
-                $('#start').css('display', 'inline');*/
                 $('#next').hide();
                 $('#prev').hide();
                 $('#start').show();
