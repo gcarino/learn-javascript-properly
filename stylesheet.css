@@ -23,9 +23,19 @@ h1 {
     padding-right: 5px;
     position: relative;
     float:right;
-    background-color: gainsboro;
+    background-color: #DCDCDC;
     color: black;
     margin: 0 2px 0 2px;
+}
+
+.button.active {
+    background-color: #F8F8FF;
+    color: white;
+}
+
+button {
+    position: relative;
+    float:right;
 }
 
 .button a {

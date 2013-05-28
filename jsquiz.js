@@ -34,15 +34,23 @@
     });
 
     // Click handler for the 'Start Over' button
-    $('#start').click(function () {
+    $('#start').on('click', function () {
         if(quiz.is(':animated')) {
             return false;
         }
         questionCounter = 0;
         selections = [];
         displayNext();
-        // $('#start').css('display', 'none');
         $('#start').hide();
+    });
+
+    // Animates the buttons on hover
+    $('.button').on('mouseenter', function () {
+        $(this).addClass('active');
+    });
+
+    $('.button').on('mouseleave', function () {
+        $(this).removeClass('active');
     });
 
     // Creates and returns the div that contains the questions and 
