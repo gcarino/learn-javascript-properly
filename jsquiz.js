@@ -7,7 +7,9 @@
     displayNext();
 
     // Click handler for the 'next' button
-    $('#next').on('click', function () {
+    $('#next').on('click', function (e) {
+        e.preventDefault();
+
         // Suspend click listener during fade animation
         if(quiz.is(':animated')) {        
             return false;
@@ -24,7 +26,9 @@
     });
     
     // Click handler for the 'prev' button
-    $('#prev').on('click', function () {
+    $('#prev').on('click', function (e) {
+        e.preventDefault();
+
         if(quiz.is(':animated')) {
             return false;
         }
@@ -34,7 +38,9 @@
     });
 
     // Click handler for the 'Start Over' button
-    $('#start').on('click', function () {
+    $('#start').on('click', function (e) {
+        e.preventDefault();
+        
         if(quiz.is(':animated')) {
             return false;
         }
@@ -44,11 +50,10 @@
         $('#start').hide();
     });
 
-    // Animates the buttons on hover
+    // Animates buttons on hover
     $('.button').on('mouseenter', function () {
         $(this).addClass('active');
     });
-
     $('.button').on('mouseleave', function () {
         $(this).removeClass('active');
     });
