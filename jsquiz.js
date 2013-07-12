@@ -111,18 +111,18 @@
 
                 // Controls display of 'prev' button
                 if(questionCounter === 1){
-                    $('#prev').show();
+                    $('#prev').fadeIn();
                 } else if(questionCounter === 0){
 
-                    $('#prev').hide();
-                    $('#next').show();
+                    $('#prev').fadeOut();
+                    $('#next').fadeIn();
                 }
             }else {
                 var scoreElem = displayScore();
                 quiz.append(scoreElem).fadeIn();
                 $('#next').hide();
                 $('#prev').hide();
-                $('#start').show();
+                $('#start').fadeIn();
             }
         });
     }
